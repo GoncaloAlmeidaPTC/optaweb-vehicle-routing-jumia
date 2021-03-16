@@ -29,8 +29,11 @@ public class DistanceMapImpl implements DistanceMap {
 
     private final DistanceMatrixRow distanceMatrixRow;
 
-    public DistanceMapImpl(DistanceMatrixRow distanceMatrixRow) {
+    private final TimeStoppedAtLocationCalculator timeStoppedAtLocationCalculator;
+
+    public DistanceMapImpl(DistanceMatrixRow distanceMatrixRow, TimeStoppedAtLocationCalculator timeStoppedAtLocationCalculator) {
         this.distanceMatrixRow = Objects.requireNonNull(distanceMatrixRow);
+        this.timeStoppedAtLocationCalculator = timeStoppedAtLocationCalculator;
     }
 
     @Override
@@ -38,12 +41,6 @@ public class DistanceMapImpl implements DistanceMap {
 
         long travelTimeInMillis = distanceMatrixRow.distanceTo(location.getId()).millis();
 
-        // if the distance if over 30 seconds then add 5 minutes for the stop
-        // otherwise it means that we're stopping in one place to deliver multiple packages (i.e. an office)
-        if (travelTimeInMillis > 30 * 1000) {
-            // add 5 minutes to emulate the time spent at the customer
-            travelTimeInMillis += (5L * 60 * 1000);
-        }
-        return travelTimeInMillis;
+        return timeStoppedAtLocationCalculator.calculate(travelTimeInMillis);
     }
 }

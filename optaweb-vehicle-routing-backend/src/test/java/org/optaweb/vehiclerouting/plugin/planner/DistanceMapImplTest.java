@@ -16,20 +16,20 @@
 
 package org.optaweb.vehiclerouting.plugin.planner;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatNullPointerException;
-
 import org.junit.jupiter.api.Test;
 import org.optaweb.vehiclerouting.domain.Distance;
 import org.optaweb.vehiclerouting.plugin.planner.domain.PlanningLocation;
 import org.optaweb.vehiclerouting.plugin.planner.domain.PlanningLocationFactory;
 import org.optaweb.vehiclerouting.service.location.DistanceMatrixRow;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
+
 class DistanceMapImplTest {
 
     @Test
     void matrix_row_must_not_be_null() {
-        assertThatNullPointerException().isThrownBy(() -> new DistanceMapImpl(null));
+        assertThatNullPointerException().isThrownBy(() -> new DistanceMapImpl(null, new TimeStoppedAtLocationCalculator()));
     }
 
     @Test
@@ -37,7 +37,7 @@ class DistanceMapImplTest {
         PlanningLocation location2 = PlanningLocationFactory.testLocation(2);
         Distance distance = Distance.ofMillis(45000);
         DistanceMatrixRow matrixRow = locationId -> distance;
-        DistanceMapImpl distanceMap = new DistanceMapImpl(matrixRow);
+        DistanceMapImpl distanceMap = new DistanceMapImpl(matrixRow, new TimeStoppedAtLocationCalculator());
         assertThat(distanceMap.distanceTo(location2)).isEqualTo(distance.millis());
     }
 }

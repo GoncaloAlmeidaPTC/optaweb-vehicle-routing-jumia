@@ -44,22 +44,24 @@ class RouteOptimizerImpl implements RouteOptimizer {
 
     private final SolverManager solverManager;
     private final RouteChangedEventPublisher routeChangedEventPublisher;
+    private final TimeStoppedAtLocationCalculator timeStoppedAtLocationCalculator;
 
     private final List<PlanningVehicle> vehicles = new ArrayList<>();
     private final List<PlanningVisit> visits = new ArrayList<>();
     private PlanningDepot depot;
 
     @Autowired
-    RouteOptimizerImpl(SolverManager solverManager, RouteChangedEventPublisher routeChangedEventPublisher) {
+    RouteOptimizerImpl(SolverManager solverManager, RouteChangedEventPublisher routeChangedEventPublisher, TimeStoppedAtLocationCalculator timeStoppedAtLocationCalculator) {
         this.solverManager = solverManager;
         this.routeChangedEventPublisher = routeChangedEventPublisher;
+        this.timeStoppedAtLocationCalculator = timeStoppedAtLocationCalculator;
     }
 
     @Override
     public void addLocation(Location domainLocation, DistanceMatrixRow distanceMatrixRow) {
         PlanningLocation location = PlanningLocationFactory.fromDomain(
                 domainLocation,
-                new DistanceMapImpl(distanceMatrixRow));
+                new DistanceMapImpl(distanceMatrixRow, timeStoppedAtLocationCalculator));
         // Unfortunately can't start solver with an empty solution (see https://issues.redhat.com/browse/PLANNER-776)
         if (depot == null) {
             depot = new PlanningDepot(location);

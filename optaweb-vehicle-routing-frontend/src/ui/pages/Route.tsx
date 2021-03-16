@@ -105,7 +105,7 @@ export class Route extends React.Component<RouteProps, RouteState> {
 
     // FIXME quick hack to preserve route color by keeping its index
     const filteredRoutes = (
-      routes.map((value, index) => (index === selectedRouteId ? value : { visits: [], track: [] }))
+      routes.map((value, index) => (index === selectedRouteId ? value : { visits: [], track: [], distance: "" }))
     );
     const filteredVisits: Location[] = routes.length > 0 ? routes[selectedRouteId].visits : [];
     return (
@@ -135,7 +135,7 @@ export class Route extends React.Component<RouteProps, RouteState> {
                       // eslint-disable-next-line react/no-array-index-key
                       key={index}
                       value={index}
-                      label={route.vehicle.name}
+                      label={route.vehicle.name + "; Travel time: " + route.distance}
                     />
                   ),
                 )}

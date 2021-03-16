@@ -16,12 +16,11 @@
 
 package org.optaweb.vehiclerouting.plugin.websocket;
 
-import java.util.List;
-import java.util.Objects;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.optaweb.vehiclerouting.domain.Route;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Vehicle {@link Route route} representation convenient for marshalling.
@@ -33,6 +32,7 @@ class PortableRoute {
     private final List<PortableLocation> visits;
     @JsonFormat(shape = JsonFormat.Shape.ARRAY)
     private final List<List<PortableCoordinates>> track;
+    private PortableDistance distance;
 
     PortableRoute(
             PortableVehicle vehicle,
@@ -59,5 +59,13 @@ class PortableRoute {
 
     public List<List<PortableCoordinates>> getTrack() {
         return track;
+    }
+
+    public PortableDistance getDistance() {
+        return distance;
+    }
+
+    public void setDistance(PortableDistance distance) {
+        this.distance = distance;
     }
 }

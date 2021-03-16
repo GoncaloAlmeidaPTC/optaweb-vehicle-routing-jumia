@@ -32,13 +32,20 @@ class WebSocketRoutingPlanSender implements RoutingPlanConsumer {
 
     private final SimpMessagingTemplate webSocket;
 
+    private final DistanceService distanceService;
+
     @Autowired
-    WebSocketRoutingPlanSender(SimpMessagingTemplate webSocket) {
+    WebSocketRoutingPlanSender(SimpMessagingTemplate webSocket, DistanceService distanceService) {
         this.webSocket = webSocket;
+        this.distanceService = distanceService;
     }
 
     @Override
     public void consumePlan(RoutingPlan routingPlan) {
-        webSocket.convertAndSend(TOPIC_ROUTE, PortableRoutingPlanFactory.fromRoutingPlan(routingPlan));
+        final PortableRoutingPlan payload = PortableRoutingPlanFactory.fromRoutingPlan(routingPlan);
+        distanceService.calculateTravelTime(payload);
+        webSocket.convertAndSend(TOPIC_ROUTE, payload);
     }
+
+
 }

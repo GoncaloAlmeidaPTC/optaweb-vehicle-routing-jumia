@@ -16,18 +16,19 @@
 
 package org.optaweb.vehiclerouting.plugin.planner.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.offset;
-import static org.optaweb.vehiclerouting.plugin.planner.domain.PlanningLocationFactory.testLocation;
-
-import java.util.HashMap;
-
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.Test;
 import org.optaweb.vehiclerouting.domain.Coordinates;
 import org.optaweb.vehiclerouting.domain.Distance;
 import org.optaweb.vehiclerouting.domain.Location;
 import org.optaweb.vehiclerouting.plugin.planner.DistanceMapImpl;
+import org.optaweb.vehiclerouting.plugin.planner.TimeStoppedAtLocationCalculator;
+
+import java.util.HashMap;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.offset;
+import static org.optaweb.vehiclerouting.plugin.planner.domain.PlanningLocationFactory.testLocation;
 
 class PlanningLocationTest {
 
@@ -43,7 +44,7 @@ class PlanningLocationTest {
                 domainLocation.id(),
                 domainLocation.coordinates().latitude().doubleValue(),
                 domainLocation.coordinates().longitude().doubleValue(),
-                new DistanceMapImpl(distanceMap::get));
+                new DistanceMapImpl(distanceMap::get, new TimeStoppedAtLocationCalculator()));
         assertThat(planningLocation.distanceTo(testLocation(otherId))).isEqualTo(millis);
     }
 

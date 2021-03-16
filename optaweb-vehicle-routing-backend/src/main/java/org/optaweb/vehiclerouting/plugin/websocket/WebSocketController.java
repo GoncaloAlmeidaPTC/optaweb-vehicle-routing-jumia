@@ -56,6 +56,7 @@ class WebSocketController {
     private final VehicleService vehicleService;
     private final DemoService demoService;
     private final ApplicationEventPublisher eventPublisher;
+    private final DistanceService distanceService;
 
     @Autowired
     WebSocketController(
@@ -64,13 +65,15 @@ class WebSocketController {
             LocationService locationService,
             VehicleService vehicleService,
             DemoService demoService,
-            ApplicationEventPublisher eventPublisher) {
+            ApplicationEventPublisher eventPublisher,
+            DistanceService distanceService) {
         this.routeListener = routeListener;
         this.regionService = regionService;
         this.locationService = locationService;
         this.vehicleService = vehicleService;
         this.demoService = demoService;
         this.eventPublisher = eventPublisher;
+        this.distanceService = distanceService;
     }
 
     @MessageExceptionHandler
@@ -106,7 +109,9 @@ class WebSocketController {
     @SubscribeMapping("/route")
     PortableRoutingPlan subscribeToRouteTopic() {
         RoutingPlan routingPlan = routeListener.getBestRoutingPlan();
-        return PortableRoutingPlanFactory.fromRoutingPlan(routingPlan);
+        final PortableRoutingPlan portableRoutingPlan = PortableRoutingPlanFactory.fromRoutingPlan(routingPlan);
+        distanceService.calculateTravelTime(portableRoutingPlan);
+        return portableRoutingPlan;
     }
 
     /**

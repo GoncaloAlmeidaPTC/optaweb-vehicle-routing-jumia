@@ -16,16 +16,16 @@
 
 package org.optaweb.vehiclerouting.service.distance;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.optaweb.vehiclerouting.domain.Distance;
 import org.optaweb.vehiclerouting.domain.Location;
 import org.optaweb.vehiclerouting.service.location.DistanceMatrix;
 import org.optaweb.vehiclerouting.service.location.DistanceMatrixRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 class DistanceMatrixImpl implements DistanceMatrix {
@@ -82,7 +82,7 @@ class DistanceMatrixImpl implements DistanceMatrix {
         };
     }
 
-    private Distance calculateOrRestoreDistance(Location from, Location to) {
+    public Distance calculateOrRestoreDistance(Location from, Location to) {
         long distance = distanceRepository.getDistance(from, to);
         if (distance < 0) {
             distance = distanceCalculator.travelTimeMillis(from.coordinates(), to.coordinates());

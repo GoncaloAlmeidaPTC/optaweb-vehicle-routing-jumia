@@ -41,6 +41,7 @@ export interface Vehicle {
 export interface Route {
   readonly vehicle: Vehicle; // TODO change to vehicleId
   readonly visits: Location[];
+  readonly distance: string;
 }
 
 export type LatLngTuple = [number, number];

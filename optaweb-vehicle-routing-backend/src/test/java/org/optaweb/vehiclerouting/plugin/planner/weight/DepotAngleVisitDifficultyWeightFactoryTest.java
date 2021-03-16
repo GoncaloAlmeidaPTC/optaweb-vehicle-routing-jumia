@@ -16,27 +16,28 @@
 
 package org.optaweb.vehiclerouting.plugin.planner.weight;
 
-import static java.util.stream.Collectors.toList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.optaweb.vehiclerouting.plugin.planner.domain.PlanningLocationFactory.fromDomain;
-import static org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVisitFactory.fromLocation;
-import static org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVisitFactory.testVisit;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
-
 import org.junit.jupiter.api.Test;
 import org.optaweb.vehiclerouting.domain.Coordinates;
 import org.optaweb.vehiclerouting.domain.Distance;
 import org.optaweb.vehiclerouting.domain.Location;
 import org.optaweb.vehiclerouting.plugin.planner.DistanceMapImpl;
+import org.optaweb.vehiclerouting.plugin.planner.TimeStoppedAtLocationCalculator;
 import org.optaweb.vehiclerouting.plugin.planner.domain.PlanningDepot;
 import org.optaweb.vehiclerouting.plugin.planner.domain.PlanningLocation;
 import org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVisit;
 import org.optaweb.vehiclerouting.plugin.planner.domain.SolutionFactory;
 import org.optaweb.vehiclerouting.plugin.planner.domain.VehicleRoutingSolution;
 import org.optaweb.vehiclerouting.plugin.planner.weight.DepotAngleVisitDifficultyWeightFactory.DepotAngleVisitDifficultyWeight;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.optaweb.vehiclerouting.plugin.planner.domain.PlanningLocationFactory.fromDomain;
+import static org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVisitFactory.fromLocation;
+import static org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVisitFactory.testVisit;
 
 class DepotAngleVisitDifficultyWeightFactoryTest {
 
@@ -50,7 +51,7 @@ class DepotAngleVisitDifficultyWeightFactoryTest {
 
     DepotAngleVisitDifficultyWeightFactoryTest() {
         Location depotLocation = new Location(0, Coordinates.valueOf(depotY, depotX));
-        depot = fromDomain(depotLocation, new DistanceMapImpl(depotDistanceMap::get));
+        depot = fromDomain(depotLocation, new DistanceMapImpl(depotDistanceMap::get, new TimeStoppedAtLocationCalculator()));
         solution.getDepotList().add(new PlanningDepot(depot));
     }
 
@@ -68,7 +69,7 @@ class DepotAngleVisitDifficultyWeightFactoryTest {
         Map<Long, Distance> locationDistanceMap = new HashMap<>();
         locationDistanceMap.put(depot.getId(), Distance.ofMillis(locationToDepot));
         Location domainLocation = new Location(id, Coordinates.valueOf(latitude, longitude));
-        return fromDomain(domainLocation, new DistanceMapImpl(locationDistanceMap::get));
+        return fromDomain(domainLocation, new DistanceMapImpl(locationDistanceMap::get, new TimeStoppedAtLocationCalculator()));
     }
 
     private DepotAngleVisitDifficultyWeight weight(PlanningLocation location) {
