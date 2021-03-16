@@ -16,13 +16,12 @@
 
 package org.optaweb.vehiclerouting.plugin.websocket;
 
-import java.math.BigDecimal;
-import java.util.Objects;
-
-import org.optaweb.vehiclerouting.domain.Location;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.optaweb.vehiclerouting.domain.Location;
+
+import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * {@link Location} representation convenient for marshalling.
@@ -36,7 +35,7 @@ class PortableLocation {
     @JsonProperty(value = "lng", required = true)
     private final BigDecimal longitude;
 
-    private final String description;
+    private String description;
 
     static PortableLocation fromLocation(Location location) {
         Objects.requireNonNull(location, "location must not be null");
@@ -73,6 +72,10 @@ class PortableLocation {
 
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

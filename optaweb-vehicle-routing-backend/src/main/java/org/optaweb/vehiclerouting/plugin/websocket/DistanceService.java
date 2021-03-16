@@ -53,7 +53,10 @@ public class DistanceService {
                 }
                 final Distance distanceBetweenPoints = distanceMatrix.calculateOrRestoreDistance(fromLocation, toLocation);
 
-                totalDistanceForRoute += timeStoppedAtLocationCalculator.calculate(distanceBetweenPoints.millis());
+                final long totalDistanceBetweenPoints = timeStoppedAtLocationCalculator.calculate(distanceBetweenPoints.millis());
+                totalDistanceForRoute += totalDistanceBetweenPoints;
+
+                nextVisit.setDescription(Distance.ofMillis(totalDistanceBetweenPoints) + "; " + nextVisit.getDescription());
 
                 logger.trace("Distance between {} and {} is {}", fromLocation, toLocation, distanceBetweenPoints);
 

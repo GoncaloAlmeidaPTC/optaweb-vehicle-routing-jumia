@@ -14,9 +14,9 @@ public class TimeStoppedAtLocationCalculator {
      */
     public long calculate(long travelTimeInMillis) {
 
-        // if the distance if over 15 seconds then add 5 minutes for the stop
+        // if the distance if over 5 seconds then add 5 minutes for the stop
         // otherwise it means that we're stopping in one place to deliver multiple packages (i.e. an office)
-        if (travelTimeInMillis > 15 * 1000) {
+        if (travelTimeInMillis >= 5 * 1000) {
             // add 5 minutes to emulate the time spent at the customer
             travelTimeInMillis += (MINUTES_TAKEN_TO_DELIVER_PARCEL * 60 * 1000);
         }
