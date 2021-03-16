@@ -35,7 +35,15 @@ public class DistanceMapImpl implements DistanceMap {
 
     @Override
     public long distanceTo(PlanningLocation location) {
-        // add 15 minutes to emulate the time spent at the customer
-        return distanceMatrixRow.distanceTo(location.getId()).millis() + (15L * 60 * 1000);
+
+        long travelTimeInMillis = distanceMatrixRow.distanceTo(location.getId()).millis();
+
+        // if the distance if over 30 seconds then add 5 minutes for the stop
+        // otherwise it means that we're stopping in one place to deliver multiple packages (i.e. an office)
+        if (travelTimeInMillis > 30 * 1000) {
+            // add 5 minutes to emulate the time spent at the customer
+            travelTimeInMillis += (5L * 60 * 1000);
+        }
+        return travelTimeInMillis;
     }
 }
