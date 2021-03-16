@@ -16,19 +16,6 @@
 
 package org.optaweb.vehiclerouting.service.demo;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -47,6 +34,19 @@ import org.optaweb.vehiclerouting.service.location.LocationRepository;
 import org.optaweb.vehiclerouting.service.location.LocationService;
 import org.optaweb.vehiclerouting.service.vehicle.VehicleRepository;
 import org.optaweb.vehiclerouting.service.vehicle.VehicleService;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class DemoServiceTest {
@@ -71,8 +71,8 @@ class DemoServiceTest {
 
     private final String problemName = "Testing problem";
     private final List<VehicleData> vehicles = Arrays.asList(
-            VehicleFactory.vehicleData("v1", 10),
-            VehicleFactory.vehicleData("v2", 10));
+            VehicleFactory.vehicleData("v1", 10, 3600000),
+            VehicleFactory.vehicleData("v2", 10, 3600000));
     private final Location depot = new Location(1, Coordinates.valueOf(1.0, 7), "Depot");
     private final List<Location> visits = Arrays.asList(new Location(2, Coordinates.valueOf(2.0, 9), "Visit"));
     private final RoutingProblem routingProblem = new RoutingProblem(problemName, vehicles, depot, visits);
@@ -116,8 +116,9 @@ class DemoServiceTest {
         Location depot = new Location(0, Coordinates.valueOf(1.0, 2.0), "Depot");
         Location visit1 = new Location(1, Coordinates.valueOf(11.0, 22.0), "Visit 1");
         Location visit2 = new Location(2, Coordinates.valueOf(22.0, 33.0), "Visit 2");
-        Vehicle vehicle1 = VehicleFactory.createVehicle(11, "Vehicle 1", 100);
-        Vehicle vehicle2 = VehicleFactory.createVehicle(12, "Vehicle 2", 200);
+        int maxWorkingHours = 3600000;
+        Vehicle vehicle1 = VehicleFactory.createVehicle(11, "Vehicle 1", 100, maxWorkingHours);
+        Vehicle vehicle2 = VehicleFactory.createVehicle(12, "Vehicle 2", 200, maxWorkingHours);
         when(locationRepository.locations()).thenReturn(Arrays.asList(depot, visit1, visit2));
         when(vehicleRepository.vehicles()).thenReturn(Arrays.asList(vehicle1, vehicle2));
 

@@ -16,15 +16,14 @@
 
 package org.optaweb.vehiclerouting.service.demo.dataset;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-import static org.assertj.core.api.Assertions.tuple;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.optaweb.vehiclerouting.service.demo.dataset.DataSetMarshaller.toDataSet;
-import static org.optaweb.vehiclerouting.service.demo.dataset.DataSetMarshaller.toDomain;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Test;
+import org.optaweb.vehiclerouting.domain.Coordinates;
+import org.optaweb.vehiclerouting.domain.LocationData;
+import org.optaweb.vehiclerouting.domain.RoutingProblem;
+import org.optaweb.vehiclerouting.domain.VehicleData;
+import org.optaweb.vehiclerouting.domain.VehicleFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,15 +33,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-import org.optaweb.vehiclerouting.domain.Coordinates;
-import org.optaweb.vehiclerouting.domain.LocationData;
-import org.optaweb.vehiclerouting.domain.RoutingProblem;
-import org.optaweb.vehiclerouting.domain.VehicleData;
-import org.optaweb.vehiclerouting.domain.VehicleFactory;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+import static org.assertj.core.api.Assertions.tuple;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.optaweb.vehiclerouting.service.demo.dataset.DataSetMarshaller.toDataSet;
+import static org.optaweb.vehiclerouting.service.demo.dataset.DataSetMarshaller.toDomain;
 
 class DataSetMarshallerTest {
 
@@ -73,6 +72,8 @@ class DataSetMarshallerTest {
 
     @Test
     void marshal_data_set() {
+        int maxWorkingHours = 3600000;
+
         DataSet dataSet = new DataSet();
         String name = "Test data set";
         dataSet.setName(name);
@@ -81,8 +82,8 @@ class DataSetMarshallerTest {
         DataSetLocation location2 = new DataSetLocation("Location 2", 2.0, 0.2);
         dataSet.setDepot(depot);
         dataSet.setVisits(Arrays.asList(location1, location2));
-        DataSetVehicle vehicle1 = new DataSetVehicle("Vehicle 1", 123);
-        DataSetVehicle vehicle2 = new DataSetVehicle("Vehicle 2", 222);
+        DataSetVehicle vehicle1 = new DataSetVehicle("Vehicle 1", 123, maxWorkingHours);
+        DataSetVehicle vehicle2 = new DataSetVehicle("Vehicle 2", 222, maxWorkingHours);
         dataSet.setVehicles(Arrays.asList(vehicle1, vehicle2));
 
         String yaml = new DataSetMarshaller().marshal(dataSet);
@@ -131,7 +132,7 @@ class DataSetMarshallerTest {
 
     @Test
     void routing_problem_conversion() {
-        VehicleData vehicle = VehicleFactory.vehicleData("vehicle", 10);
+        VehicleData vehicle = VehicleFactory.vehicleData("vehicle", 10, 3600000);
         List<VehicleData> vehicles = Arrays.asList(vehicle);
         LocationData depot = new LocationData(Coordinates.valueOf(60.1, 5.78), "Depot");
         LocationData visit = new LocationData(Coordinates.valueOf(1.06, 8.75), "Visit");

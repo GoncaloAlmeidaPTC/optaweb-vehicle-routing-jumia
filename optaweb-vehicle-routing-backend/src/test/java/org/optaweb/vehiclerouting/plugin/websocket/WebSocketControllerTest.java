@@ -16,15 +16,6 @@
 
 package org.optaweb.vehiclerouting.plugin.websocket;
 
-import static java.util.Collections.singletonList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -47,6 +38,15 @@ import org.optaweb.vehiclerouting.service.region.RegionService;
 import org.optaweb.vehiclerouting.service.route.RouteListener;
 import org.optaweb.vehiclerouting.service.vehicle.VehicleService;
 import org.springframework.context.ApplicationEventPublisher;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class WebSocketControllerTest {
@@ -77,7 +77,7 @@ class WebSocketControllerTest {
         // arrange
         Distance distance = Distance.ofMillis(987_654_321);
         Location depot = new Location(1, Coordinates.valueOf(3, 5));
-        Vehicle vehicle = VehicleFactory.createVehicle(1, "vehicle", 77);
+        Vehicle vehicle = VehicleFactory.createVehicle(1, "vehicle", 77, 3600000);
         Location visit = new Location(2, Coordinates.valueOf(321, 123));
         Route route = new Route(vehicle, depot, singletonList(visit));
         Coordinates pointOnTrack = Coordinates.valueOf(0, 0);

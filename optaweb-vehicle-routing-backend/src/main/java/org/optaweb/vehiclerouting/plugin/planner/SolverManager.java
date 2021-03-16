@@ -16,15 +16,13 @@
 
 package org.optaweb.vehiclerouting.plugin.planner;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.event.BestSolutionChangedEvent;
 import org.optaplanner.core.api.solver.event.SolverEventListener;
 import org.optaweb.vehiclerouting.plugin.planner.change.AddVehicle;
 import org.optaweb.vehiclerouting.plugin.planner.change.AddVisit;
 import org.optaweb.vehiclerouting.plugin.planner.change.ChangeVehicleCapacity;
+import org.optaweb.vehiclerouting.plugin.planner.change.ChangeVehicleMaxWorkingHours;
 import org.optaweb.vehiclerouting.plugin.planner.change.RemoveVehicle;
 import org.optaweb.vehiclerouting.plugin.planner.change.RemoveVisit;
 import org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVehicle;
@@ -38,6 +36,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFuture;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Manages a solver running in a different thread.
@@ -175,6 +176,11 @@ class SolverManager implements SolverEventListener<VehicleRoutingSolution> {
     void changeCapacity(PlanningVehicle vehicle) {
         assertSolverIsAlive();
         solver.addProblemFactChange(new ChangeVehicleCapacity(vehicle));
+    }
+
+    void changeMaxWorkingHours(PlanningVehicle vehicle) {
+        assertSolverIsAlive();
+        solver.addProblemFactChange(new ChangeVehicleMaxWorkingHours(vehicle));
     }
 
     /**

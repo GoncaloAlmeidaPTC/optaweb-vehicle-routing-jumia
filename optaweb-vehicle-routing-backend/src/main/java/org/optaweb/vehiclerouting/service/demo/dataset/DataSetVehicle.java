@@ -28,10 +28,13 @@ public class DataSetVehicle {
     final String name;
     @JsonProperty
     final int capacity;
+    @JsonProperty
+    final int maxWorkingHours;
 
     @JsonCreator
-    public DataSetVehicle(@JsonProperty("name") String name, @JsonProperty("capacity") int capacity) {
+    public DataSetVehicle(@JsonProperty("name") String name, @JsonProperty("capacity") int capacity, @JsonProperty("maxWorkingHours") int maxWorkingHours) {
         this.name = name;
         this.capacity = capacity;
+        this.maxWorkingHours = maxWorkingHours;
     }
 }

@@ -16,9 +16,6 @@
 
 package org.optaweb.vehiclerouting.plugin.planner;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.optaweb.vehiclerouting.domain.Location;
 import org.optaweb.vehiclerouting.domain.Vehicle;
 import org.optaweb.vehiclerouting.plugin.planner.domain.PlanningDepot;
@@ -33,6 +30,9 @@ import org.optaweb.vehiclerouting.service.location.DistanceMatrixRow;
 import org.optaweb.vehiclerouting.service.location.RouteOptimizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Accumulates vehicles, depots and visits until there's enough data to start the optimization.
@@ -148,6 +148,21 @@ class RouteOptimizerImpl implements RouteOptimizer {
         vehicle.setCapacity(domainVehicle.capacity());
         if (!visits.isEmpty()) {
             solverManager.changeCapacity(vehicle);
+        } else {
+            publishSolution();
+        }
+    }
+
+    @Override
+    public void changeMaxWorkingHours(Vehicle domainVehicle) {
+        PlanningVehicle vehicle = vehicles.stream()
+                .filter(item -> item.getId() == domainVehicle.id())
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Cannot change max working hours of " + domainVehicle + " because it doesn't exist"));
+        vehicle.setMaxWorkingHours(domainVehicle.maxWorkingHours());
+        if (!visits.isEmpty()) {
+            solverManager.changeMaxWorkingHours(vehicle);
         } else {
             publishSolution();
         }

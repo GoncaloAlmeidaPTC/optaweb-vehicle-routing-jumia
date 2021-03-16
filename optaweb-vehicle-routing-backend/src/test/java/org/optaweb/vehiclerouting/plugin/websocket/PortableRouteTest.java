@@ -16,20 +16,19 @@
 
 package org.optaweb.vehiclerouting.plugin.websocket;
 
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.optaweb.vehiclerouting.plugin.websocket.PortableCoordinates.fromCoordinates;
-import static org.optaweb.vehiclerouting.plugin.websocket.PortableLocation.fromLocation;
-
-import java.io.IOException;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.optaweb.vehiclerouting.domain.Coordinates;
 import org.optaweb.vehiclerouting.domain.Location;
 import org.springframework.boot.test.json.JacksonTester;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.optaweb.vehiclerouting.plugin.websocket.PortableCoordinates.fromCoordinates;
+import static org.optaweb.vehiclerouting.plugin.websocket.PortableLocation.fromLocation;
 
 class PortableRouteTest {
 
@@ -43,7 +42,7 @@ class PortableRouteTest {
 
     @Test
     void marshal_to_json() throws IOException {
-        PortableVehicle vehicle = new PortableVehicle(13, "Vehicle", 45317);
+        PortableVehicle vehicle = new PortableVehicle(13, "Vehicle", 45317, 3);
         PortableLocation depot = visit(8, 42.6501218, -71.8835449, "Test depot");
         PortableLocation visit1 = visit(100, 42.7066596, -72.4934873, "Visit 1");
         PortableLocation visit2 = visit(200, 42.5543343, -71.4438280, "Visit 2");

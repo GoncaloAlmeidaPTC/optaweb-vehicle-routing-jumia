@@ -16,9 +16,6 @@
 
 package org.optaweb.vehiclerouting.plugin.planner;
 
-import static org.optaweb.vehiclerouting.plugin.planner.domain.PlanningLocationFactory.testLocation;
-import static org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVisitFactory.fromLocation;
-
 import org.junit.jupiter.api.Test;
 import org.optaplanner.core.api.score.buildin.hardsoftlong.HardSoftLongScore;
 import org.optaplanner.test.api.score.stream.ConstraintVerifier;
@@ -29,6 +26,9 @@ import org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVehicleFactory;
 import org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVisit;
 import org.optaweb.vehiclerouting.plugin.planner.domain.Standstill;
 import org.optaweb.vehiclerouting.plugin.planner.domain.VehicleRoutingSolution;
+
+import static org.optaweb.vehiclerouting.plugin.planner.domain.PlanningLocationFactory.testLocation;
+import static org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVisitFactory.fromLocation;
 
 class VehicleRoutingConstraintProviderTest {
 
@@ -58,8 +58,9 @@ class VehicleRoutingConstraintProviderTest {
     void vehicle_capacity_penalized_1vehicle_1visit() {
         int demand = 100;
         int capacity = 5;
+        int maxWorkingHours = 3600000;
 
-        PlanningVehicle vehicle = PlanningVehicleFactory.testVehicle(1, capacity);
+        PlanningVehicle vehicle = PlanningVehicleFactory.testVehicle(1, capacity, maxWorkingHours);
         vehicle.setDepot(new PlanningDepot(testLocation(1, distanceToAll(0))));
 
         PlanningVisit visit = fromLocation(testLocation(2, distanceToAll(0)), demand);
@@ -77,8 +78,9 @@ class VehicleRoutingConstraintProviderTest {
         int demand2 = 3;
         int demand3 = 9;
         int capacity = 5;
+        int maxWorkingHours = 3600000;
 
-        PlanningVehicle vehicle = PlanningVehicleFactory.testVehicle(1, capacity);
+        PlanningVehicle vehicle = PlanningVehicleFactory.testVehicle(1, capacity, maxWorkingHours);
         vehicle.setDepot(new PlanningDepot(testLocation(0, distanceToAll(0))));
 
         PlanningVisit visit1 = fromLocation(testLocation(1, distanceToAll(0)), demand1);
@@ -98,8 +100,9 @@ class VehicleRoutingConstraintProviderTest {
         int demand2 = 3;
         int demand3 = 9;
         int totalDemand = demand1 + demand2 + demand3;
+        int maxWorkingHours = 3600000;
 
-        PlanningVehicle vehicle = PlanningVehicleFactory.testVehicle(1, totalDemand);
+        PlanningVehicle vehicle = PlanningVehicleFactory.testVehicle(1, totalDemand, maxWorkingHours);
         vehicle.setDepot(new PlanningDepot(testLocation(0, distanceToAll(0))));
 
         PlanningVisit visit1 = fromLocation(testLocation(1, distanceToAll(0)), demand1);
@@ -129,12 +132,13 @@ class VehicleRoutingConstraintProviderTest {
         int demand2c = 8000;
         int capacity1 = demand1a + demand1b + demand1c;
         int capacity2 = demand2a + demand2b + demand2c;
+        int maxWorkingHours = 3600000;
 
         PlanningDepot depot = new PlanningDepot(testLocation(0, distanceToAll(0)));
 
-        PlanningVehicle vehicle1 = PlanningVehicleFactory.testVehicle(1, capacity1);
+        PlanningVehicle vehicle1 = PlanningVehicleFactory.testVehicle(1, capacity1, maxWorkingHours);
         vehicle1.setDepot(depot);
-        PlanningVehicle vehicle2 = PlanningVehicleFactory.testVehicle(2, capacity2);
+        PlanningVehicle vehicle2 = PlanningVehicleFactory.testVehicle(2, capacity2, maxWorkingHours);
         vehicle2.setDepot(depot);
 
         PlanningVisit visit1 = fromLocation(testLocation(1, distanceToAll(0)), demand1a);
@@ -166,9 +170,11 @@ class VehicleRoutingConstraintProviderTest {
         PlanningDepot depot1 = new PlanningDepot(testLocation(0, distanceToAll(fromDepot1)));
         PlanningDepot depot2 = new PlanningDepot(testLocation(0, distanceToAll(fromDepot2)));
 
-        PlanningVehicle vehicle1 = PlanningVehicleFactory.testVehicle(1, Integer.MAX_VALUE);
+        int maxWorkingHours = 3600000;
+
+        PlanningVehicle vehicle1 = PlanningVehicleFactory.testVehicle(1, Integer.MAX_VALUE, maxWorkingHours);
         vehicle1.setDepot(depot1);
-        PlanningVehicle vehicle2 = PlanningVehicleFactory.testVehicle(1, Integer.MAX_VALUE);
+        PlanningVehicle vehicle2 = PlanningVehicleFactory.testVehicle(1, Integer.MAX_VALUE, maxWorkingHours);
         vehicle2.setDepot(depot2);
 
         int fromA = 17;

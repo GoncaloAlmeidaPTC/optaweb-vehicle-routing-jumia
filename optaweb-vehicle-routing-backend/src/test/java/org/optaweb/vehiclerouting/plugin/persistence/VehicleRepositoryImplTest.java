@@ -16,16 +16,6 @@
 
 package org.optaweb.vehiclerouting.plugin.persistence;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -37,6 +27,16 @@ import org.optaweb.vehiclerouting.domain.Vehicle;
 import org.optaweb.vehiclerouting.domain.VehicleData;
 import org.optaweb.vehiclerouting.domain.VehicleFactory;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
 class VehicleRepositoryImplTest {
 
@@ -47,10 +47,10 @@ class VehicleRepositoryImplTest {
     @Captor
     private ArgumentCaptor<VehicleEntity> vehicleEntityCaptor;
 
-    private final Vehicle testVehicle = VehicleFactory.createVehicle(19, "vehicle name", 1100);
+    private final Vehicle testVehicle = VehicleFactory.createVehicle(19, "vehicle name", 1100, 3600000);
 
     private static VehicleEntity vehicleEntity(Vehicle vehicle) {
-        return new VehicleEntity(vehicle.id(), vehicle.name(), vehicle.capacity());
+        return new VehicleEntity(vehicle.id(), vehicle.name(), vehicle.capacity(), vehicle.maxWorkingHours());
     }
 
     @Test
@@ -59,9 +59,10 @@ class VehicleRepositoryImplTest {
         VehicleEntity newEntity = vehicleEntity(testVehicle);
         when(crudRepository.save(vehicleEntityCaptor.capture())).thenReturn(newEntity);
         int savedCapacity = 1;
+        int maxWorkingHours = 3600000;
 
         // act
-        Vehicle newVehicle = repository.createVehicle(savedCapacity);
+        Vehicle newVehicle = repository.createVehicle(savedCapacity, maxWorkingHours);
 
         // assert
         // -- the correct values were used to save the entity
@@ -88,7 +89,7 @@ class VehicleRepositoryImplTest {
         VehicleEntity newEntity = vehicleEntity(testVehicle);
         when(crudRepository.save(vehicleEntityCaptor.capture())).thenReturn(newEntity);
 
-        VehicleData vehicleData = VehicleFactory.vehicleData("x", 1);
+        VehicleData vehicleData = VehicleFactory.vehicleData("x", 1, 3600000);
 
         // act
         Vehicle newVehicle = repository.createVehicle(vehicleData);

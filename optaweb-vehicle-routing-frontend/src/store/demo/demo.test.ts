@@ -64,7 +64,7 @@ describe('Demo reducers', () => {
   });
 });
 
-const vehicle1: Vehicle = { id: 1, name: 'v1', capacity: 5 };
+const vehicle1: Vehicle = { id: 1, name: 'v1', capacity: 5, maxWorkingHours: 3 };
 const visit1 = {
   id: 1,
   lat: 1.345678,

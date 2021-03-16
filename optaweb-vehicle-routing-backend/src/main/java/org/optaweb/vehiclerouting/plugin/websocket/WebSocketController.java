@@ -16,11 +16,6 @@
 
 package org.optaweb.vehiclerouting.plugin.websocket;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.Arrays;
-import java.util.List;
-
 import org.optaweb.vehiclerouting.domain.Coordinates;
 import org.optaweb.vehiclerouting.domain.RoutingPlan;
 import org.optaweb.vehiclerouting.service.demo.DemoService;
@@ -39,6 +34,11 @@ import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Handles WebSocket subscriptions and STOMP messages.
@@ -171,5 +171,10 @@ class WebSocketController {
     @MessageMapping("/vehicle/{id}/capacity")
     void changeCapacity(@DestinationVariable long id, int capacity) {
         vehicleService.changeCapacity(id, capacity);
+    }
+
+    @MessageMapping("/vehicle/{id}/workinghours")
+    void changeMaxWorkingHours(@DestinationVariable long id, int maxWorkingHours) {
+        vehicleService.changeMaxWorkingHours(id, maxWorkingHours);
     }
 }

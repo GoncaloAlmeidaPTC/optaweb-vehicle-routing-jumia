@@ -16,9 +16,9 @@
 
 package org.optaweb.vehiclerouting.plugin.websocket;
 
-import java.util.Objects;
-
 import org.optaweb.vehiclerouting.domain.Vehicle;
+
+import java.util.Objects;
 
 /**
  * {@link Vehicle} representation suitable for network transport.
@@ -29,15 +29,18 @@ class PortableVehicle {
     private final String name;
     private final int capacity;
 
+    private final int maxWorkingHours;
+
     static PortableVehicle fromVehicle(Vehicle vehicle) {
         Objects.requireNonNull(vehicle, "vehicle must not be null");
-        return new PortableVehicle(vehicle.id(), vehicle.name(), vehicle.capacity());
+        return new PortableVehicle(vehicle.id(), vehicle.name(), vehicle.capacity(), vehicle.maxWorkingHours() / 3600000);
     }
 
-    PortableVehicle(long id, String name, int capacity) {
+    PortableVehicle(long id, String name, int capacity, int maxWorkingHours) {
         this.id = id;
         this.name = Objects.requireNonNull(name);
         this.capacity = capacity;
+        this.maxWorkingHours = maxWorkingHours;
     }
 
     public long getId() {
@@ -50,6 +53,10 @@ class PortableVehicle {
 
     public int getCapacity() {
         return capacity;
+    }
+
+    public int getMaxWorkingHours() {
+        return maxWorkingHours;
     }
 
     @Override

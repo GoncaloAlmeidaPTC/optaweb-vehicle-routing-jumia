@@ -16,12 +16,6 @@
 
 package org.optaweb.vehiclerouting.plugin.persistence;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.StreamSupport;
-
 import org.optaweb.vehiclerouting.domain.Vehicle;
 import org.optaweb.vehiclerouting.domain.VehicleData;
 import org.optaweb.vehiclerouting.domain.VehicleFactory;
@@ -29,6 +23,12 @@ import org.optaweb.vehiclerouting.service.vehicle.VehicleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static java.util.stream.Collectors.toList;
 
 @Component
 public class VehicleRepositoryImpl implements VehicleRepository {
@@ -41,9 +41,9 @@ public class VehicleRepositoryImpl implements VehicleRepository {
     }
 
     @Override
-    public Vehicle createVehicle(int capacity) {
-        long id = repository.save(new VehicleEntity(0, null, capacity)).getId();
-        VehicleEntity vehicleEntity = repository.save(new VehicleEntity(id, "Vehicle " + id, capacity));
+    public Vehicle createVehicle(int capacity, int maxWorkingHours) {
+        long id = repository.save(new VehicleEntity(0, null, capacity, maxWorkingHours)).getId();
+        VehicleEntity vehicleEntity = repository.save(new VehicleEntity(id, "Vehicle " + id, capacity, maxWorkingHours));
         Vehicle vehicle = toDomain(vehicleEntity);
         logger.info("Created vehicle {}.", vehicle);
         return vehicle;
@@ -51,7 +51,8 @@ public class VehicleRepositoryImpl implements VehicleRepository {
 
     @Override
     public Vehicle createVehicle(VehicleData vehicleData) {
-        VehicleEntity vehicleEntity = repository.save(new VehicleEntity(0, vehicleData.name(), vehicleData.capacity()));
+        VehicleEntity vehicleEntity = repository.save(new VehicleEntity(0, vehicleData.name(), vehicleData.capacity(),
+                                                                        vehicleData.maxWorkingHours()));
         Vehicle vehicle = toDomain(vehicleEntity);
         logger.info("Created vehicle {}.", vehicle);
         return vehicle;
@@ -87,13 +88,14 @@ public class VehicleRepositoryImpl implements VehicleRepository {
 
     @Override
     public void update(Vehicle vehicle) {
-        repository.save(new VehicleEntity(vehicle.id(), vehicle.name(), vehicle.capacity()));
+        repository.save(new VehicleEntity(vehicle.id(), vehicle.name(), vehicle.capacity(), vehicle.maxWorkingHours()));
     }
 
     private static Vehicle toDomain(VehicleEntity vehicleEntity) {
         return VehicleFactory.createVehicle(
                 vehicleEntity.getId(),
                 vehicleEntity.getName(),
-                vehicleEntity.getCapacity());
+                vehicleEntity.getCapacity(),
+                vehicleEntity.getMaxWorkingHours());
     }
 }

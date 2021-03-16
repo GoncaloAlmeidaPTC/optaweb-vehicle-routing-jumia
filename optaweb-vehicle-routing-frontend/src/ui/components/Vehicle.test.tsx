@@ -27,8 +27,10 @@ describe('Vehicle Component', () => {
       id: 10,
       description: 'x',
       capacity: 7,
+      maxWorkingHours: 3,
       removeHandler: jest.fn(),
       capacityChangeHandler: jest.fn(),
+      maxWorkingHoursChangeHandler: jest.fn(),
     };
     const vehicle = shallow(<Vehicle {...props} />);
     expect(toJson(vehicle)).toMatchSnapshot();

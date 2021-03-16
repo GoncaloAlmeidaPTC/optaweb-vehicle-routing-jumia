@@ -16,11 +16,11 @@
 
 package org.optaweb.vehiclerouting.service.vehicle;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.optaweb.vehiclerouting.domain.Vehicle;
 import org.optaweb.vehiclerouting.domain.VehicleData;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Defines repository operations on vehicles.
@@ -33,7 +33,7 @@ public interface VehicleRepository {
      * @param capacity vehicle's capacity
      * @return a new vehicle
      */
-    Vehicle createVehicle(int capacity);
+    Vehicle createVehicle(int capacity, int maxWorkingHours);
 
     /**
      * Create a vehicle from the given data.

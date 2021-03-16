@@ -34,7 +34,7 @@ public class PlanningVehicleFactory {
      * @return planning vehicle
      */
     public static PlanningVehicle fromDomain(Vehicle domainVehicle) {
-        return vehicle(domainVehicle.id(), domainVehicle.capacity());
+        return vehicle(domainVehicle.id(), domainVehicle.capacity(), domainVehicle.maxWorkingHours());
     }
 
     /**
@@ -44,7 +44,7 @@ public class PlanningVehicleFactory {
      * @return new vehicle with zero capacity
      */
     public static PlanningVehicle testVehicle(long id) {
-        return vehicle(id, 0);
+        return vehicle(id, 0, 3);
     }
 
     /**
@@ -53,14 +53,15 @@ public class PlanningVehicleFactory {
      * @param id vehicle's ID
      * @return new vehicle with the given capacity
      */
-    public static PlanningVehicle testVehicle(long id, int capacity) {
-        return vehicle(id, capacity);
+    public static PlanningVehicle testVehicle(long id, int capacity, int maxWorkingHours) {
+        return vehicle(id, capacity, maxWorkingHours);
     }
 
-    private static PlanningVehicle vehicle(long id, int capacity) {
+    private static PlanningVehicle vehicle(long id, int capacity, int maxWorkingHours) {
         PlanningVehicle vehicle = new PlanningVehicle();
         vehicle.setId(id);
         vehicle.setCapacity(capacity);
+        vehicle.setMaxWorkingHours(maxWorkingHours);
         return vehicle;
     }
 }

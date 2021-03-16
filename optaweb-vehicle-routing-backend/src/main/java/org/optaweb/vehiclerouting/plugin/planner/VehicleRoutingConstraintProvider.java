@@ -16,23 +16,38 @@
 
 package org.optaweb.vehiclerouting.plugin.planner;
 
-import static org.optaplanner.core.api.score.stream.ConstraintCollectors.sum;
-
 import org.optaplanner.core.api.score.buildin.hardsoftlong.HardSoftLongScore;
 import org.optaplanner.core.api.score.stream.Constraint;
 import org.optaplanner.core.api.score.stream.ConstraintFactory;
 import org.optaplanner.core.api.score.stream.ConstraintProvider;
+import org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVehicle;
 import org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVisit;
+
+import static org.optaplanner.core.api.score.stream.ConstraintCollectors.sum;
+import static org.optaplanner.core.api.score.stream.ConstraintCollectors.sumLong;
 
 public class VehicleRoutingConstraintProvider implements ConstraintProvider {
 
     @Override
     public Constraint[] defineConstraints(ConstraintFactory constraintFactory) {
-        return new Constraint[] {
+        return new Constraint[]{
                 vehicleCapacity(constraintFactory),
+//                vehicleNotWorking(constraintFactory),
+                vehicleWorkingHours(constraintFactory),
                 distanceFromPreviousStandstill(constraintFactory),
                 distanceFromLastVisitToDepot(constraintFactory)
         };
+    }
+
+    private Constraint vehicleWorkingHours(ConstraintFactory constraintFactory) {
+
+        return constraintFactory.from(PlanningVisit.class)
+                .groupBy(PlanningVisit::getVehicle, sumLong(PlanningVisit::distanceFromPreviousStandstill))
+                .filter((vehicle, distance) -> distance >= vehicle.getMaxWorkingHours())
+                .penalizeLong(
+                        "vechile working hours",
+                        HardSoftLongScore.ONE_HARD,
+                        (vehicle, distance) -> distance - vehicle.getMaxWorkingHours());
     }
 
     Constraint vehicleCapacity(ConstraintFactory constraintFactory) {
@@ -60,5 +75,14 @@ public class VehicleRoutingConstraintProvider implements ConstraintProvider {
                         "distance from last visit to depot",
                         HardSoftLongScore.ONE_SOFT,
                         PlanningVisit::distanceToDepot);
+    }
+
+    private Constraint vehicleNotWorking(ConstraintFactory constraintFactory) {
+
+        return constraintFactory.from(PlanningVehicle.class)
+                .filter(vehicle -> vehicle.countFutureVisits() == 0)
+                .penalize(
+                        "vehicle not working",
+                        HardSoftLongScore.ONE_HARD);
     }
 }

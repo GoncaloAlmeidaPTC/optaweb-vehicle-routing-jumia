@@ -16,11 +16,11 @@
 
 package org.optaweb.vehiclerouting.plugin.planner;
 
-import java.util.Objects;
-
 import org.optaweb.vehiclerouting.plugin.planner.domain.DistanceMap;
 import org.optaweb.vehiclerouting.plugin.planner.domain.PlanningLocation;
 import org.optaweb.vehiclerouting.service.location.DistanceMatrixRow;
+
+import java.util.Objects;
 
 /**
  * Provides distances to {@link PlanningLocation}s by reading from a {@link DistanceMatrixRow}.
@@ -35,6 +35,7 @@ public class DistanceMapImpl implements DistanceMap {
 
     @Override
     public long distanceTo(PlanningLocation location) {
-        return distanceMatrixRow.distanceTo(location.getId()).millis();
+        // add 15 minutes to emulate the time spent at the customer
+        return distanceMatrixRow.distanceTo(location.getId()).millis() + (15L * 60 * 1000);
     }
 }

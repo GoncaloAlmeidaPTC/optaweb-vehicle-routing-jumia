@@ -91,6 +91,12 @@ export default class WebSocketClient {
     }
   }
 
+  changeVehicleMaxWorkingHours(vehicleId: number, maxWorkingHours: number) {
+    if (this.stompClient) {
+      this.stompClient.send(`/app/vehicle/${vehicleId}/workinghours`, JSON.stringify(maxWorkingHours));
+    }
+  }
+
   clear() {
     if (this.stompClient) {
       this.stompClient.send('/app/clear');

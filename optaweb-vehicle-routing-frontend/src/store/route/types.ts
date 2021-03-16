@@ -35,6 +35,7 @@ export interface Vehicle {
   readonly id: number;
   readonly name: string;
   readonly capacity: number;
+  readonly maxWorkingHours: number;
 }
 
 export interface Route {
@@ -86,6 +87,11 @@ export interface DeleteVehicleAction extends Action<ActionType.DELETE_VEHICLE> {
 export interface VehicleCapacity {
   vehicleId: number;
   capacity: number;
+}
+
+export interface VehicleMaxWorkingHours {
+  vehicleId: number;
+  maxWorkingHours: number;
 }
 
 export interface UpdateRouteAction extends Action<ActionType.UPDATE_ROUTING_PLAN> {

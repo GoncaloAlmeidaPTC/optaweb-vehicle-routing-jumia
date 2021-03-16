@@ -16,17 +16,16 @@
 
 package org.optaweb.vehiclerouting.plugin.websocket;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatNullPointerException;
-
-import java.io.IOException;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.optaweb.vehiclerouting.domain.VehicleFactory;
 import org.springframework.boot.test.json.JacksonTester;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
 class PortableVehicleTest {
 
@@ -42,7 +41,7 @@ class PortableVehicleTest {
         long id = 321;
         String name = "Pink: {XY-123} \"B\"";
         int capacity = 78;
-        PortableVehicle portableVehicle = new PortableVehicle(id, name, capacity);
+        PortableVehicle portableVehicle = new PortableVehicle(id, name, capacity, 3);
         String jsonTemplate = "{\"id\":%d,\"name\":\"%s\",\"capacity\":%d}";
         assertThat(json.write(portableVehicle)).isEqualToJson(
                 String.format(jsonTemplate, id, name.replaceAll("\"", "\\\\\""), capacity));
@@ -50,7 +49,7 @@ class PortableVehicleTest {
 
     @Test
     void constructor_params_must_not_be_null() {
-        assertThatNullPointerException().isThrownBy(() -> new PortableVehicle(1, null, 2));
+        assertThatNullPointerException().isThrownBy(() -> new PortableVehicle(1, null, 2, 3));
     }
 
     @Test
@@ -58,7 +57,8 @@ class PortableVehicleTest {
         long id = 321;
         String name = "Pink XY-123 B";
         int capacity = 31;
-        PortableVehicle portableVehicle = PortableVehicle.fromVehicle(VehicleFactory.createVehicle(id, name, capacity));
+        int maxWorkingHours = 3600000;
+        PortableVehicle portableVehicle = PortableVehicle.fromVehicle(VehicleFactory.createVehicle(id, name, capacity, maxWorkingHours));
         assertThat(portableVehicle.getId()).isEqualTo(id);
         assertThat(portableVehicle.getName()).isEqualTo(name);
         assertThat(portableVehicle.getCapacity()).isEqualTo(capacity);
@@ -73,19 +73,20 @@ class PortableVehicleTest {
         long id = 123456;
         String name = "x y";
         int capacity = 444111;
-        PortableVehicle portableVehicle = new PortableVehicle(id, name, capacity);
+        int maxWorkingHours = 3600000;
+        PortableVehicle portableVehicle = new PortableVehicle(id, name, capacity, maxWorkingHours);
 
         assertThat(portableVehicle)
                 // equals()
                 .isNotEqualTo(null)
-                .isNotEqualTo(VehicleFactory.createVehicle(id, name, capacity))
-                .isNotEqualTo(new PortableVehicle(id + 1, name, capacity))
-                .isNotEqualTo(new PortableVehicle(id, name + "z", capacity))
-                .isNotEqualTo(new PortableVehicle(id, name, capacity + 1))
+                .isNotEqualTo(VehicleFactory.createVehicle(id, name, capacity, maxWorkingHours))
+                .isNotEqualTo(new PortableVehicle(id + 1, name, capacity, maxWorkingHours))
+                .isNotEqualTo(new PortableVehicle(id, name + "z", capacity, maxWorkingHours))
+                .isNotEqualTo(new PortableVehicle(id, name, capacity + 1, maxWorkingHours))
                 .isEqualTo(portableVehicle)
-                .isEqualTo(new PortableVehicle(id, name, capacity))
+                .isEqualTo(new PortableVehicle(id, name, capacity, maxWorkingHours))
                 // hasCode()
-                .hasSameHashCodeAs(new PortableVehicle(id, name, capacity))
+                .hasSameHashCodeAs(new PortableVehicle(id, name, capacity, maxWorkingHours))
                 // toString()
                 .asString()
                 .contains(

@@ -16,16 +16,20 @@
 
 package org.optaweb.vehiclerouting.plugin.planner.domain;
 
+import org.optaplanner.core.api.domain.lookup.PlanningId;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
-import org.optaplanner.core.api.domain.lookup.PlanningId;
+import java.util.stream.StreamSupport;
 
 public class PlanningVehicle implements Standstill {
 
     @PlanningId
     private long id;
     private int capacity;
+
+    private int maxWorkingHours;
+
     private PlanningDepot depot;
 
     // Shadow variables
@@ -34,7 +38,6 @@ public class PlanningVehicle implements Standstill {
     PlanningVehicle() {
         // Hide public constructor in favor of the factory.
     }
-
     public long getId() {
         return id;
     }
@@ -49,6 +52,14 @@ public class PlanningVehicle implements Standstill {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public int getMaxWorkingHours() {
+        return maxWorkingHours;
+    }
+
+    public void setMaxWorkingHours(int maxWorkingHours) {
+        this.maxWorkingHours = maxWorkingHours;
     }
 
     public PlanningDepot getDepot() {
@@ -67,6 +78,23 @@ public class PlanningVehicle implements Standstill {
     @Override
     public void setNextVisit(PlanningVisit nextVisit) {
         this.nextVisit = nextVisit;
+    }
+
+    public long sumTravelTime() {
+
+        long totalTravelTime = 0L;
+
+        for (PlanningVisit nextVisit : getFutureVisits()) {
+            if (nextVisit.getNextVisit() != null) {
+                totalTravelTime += nextVisit.distanceFromPreviousStandstill();
+            }
+        }
+        return totalTravelTime;
+    }
+
+    public long countFutureVisits() {
+
+        return StreamSupport.stream(getFutureVisits().spliterator(), false).count();
     }
 
     public Iterable<PlanningVisit> getFutureVisits() {

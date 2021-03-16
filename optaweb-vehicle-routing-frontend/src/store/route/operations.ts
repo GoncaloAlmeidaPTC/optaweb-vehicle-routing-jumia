@@ -17,13 +17,13 @@
 import { ThunkCommandFactory } from '../types';
 import * as actions from './actions';
 import {
-  AddLocationAction,
-  AddVehicleAction,
-  ClearRouteAction,
-  DeleteLocationAction,
-  DeleteVehicleAction,
-  LatLngWithDescription,
-  VehicleCapacity,
+    AddLocationAction,
+    AddVehicleAction,
+    ClearRouteAction,
+    DeleteLocationAction,
+    DeleteVehicleAction,
+    LatLngWithDescription,
+    VehicleCapacity, VehicleMaxWorkingHours,
 } from './types';
 
 export const { updateRoute } = actions;
@@ -61,6 +61,11 @@ export const changeVehicleCapacity: ThunkCommandFactory<VehicleCapacity, never> 
   ({ vehicleId, capacity }: VehicleCapacity) => (dispatch, getState, client) => {
     client.changeVehicleCapacity(vehicleId, capacity);
   });
+
+export const changeVehicleMaxWorkingHours: ThunkCommandFactory<VehicleMaxWorkingHours, never> = (
+    ({ vehicleId, maxWorkingHours }: VehicleMaxWorkingHours) => (dispatch, getState, client) => {
+        client.changeVehicleMaxWorkingHours(vehicleId, maxWorkingHours);
+    });
 
 export const clearRoute: ThunkCommandFactory<void, ClearRouteAction> = (
   () => (dispatch, getState, client) => {

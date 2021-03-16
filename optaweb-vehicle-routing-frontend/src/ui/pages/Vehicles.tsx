@@ -39,6 +39,7 @@ interface DispatchProps {
   addVehicleHandler: typeof routeOperations.addVehicle;
   removeVehicleHandler: typeof routeOperations.deleteVehicle;
   changeVehicleCapacityHandler: typeof routeOperations.changeVehicleCapacity;
+  changeVehicleMaxWorkingHoursHandler: typeof routeOperations.changeVehicleMaxWorkingHours;
 }
 
 export type Props = StateProps & DispatchProps;
@@ -51,10 +52,11 @@ const mapDispatchToProps: DispatchProps = {
   addVehicleHandler: routeOperations.addVehicle,
   removeVehicleHandler: routeOperations.deleteVehicle,
   changeVehicleCapacityHandler: routeOperations.changeVehicleCapacity,
+  changeVehicleMaxWorkingHoursHandler: routeOperations.changeVehicleMaxWorkingHours,
 };
 
 export const Vehicles: React.FC<Props> = ({
-  vehicles, addVehicleHandler, removeVehicleHandler, changeVehicleCapacityHandler,
+  vehicles, addVehicleHandler, removeVehicleHandler, changeVehicleCapacityHandler, changeVehicleMaxWorkingHoursHandler,
 }) => (
   <>
     <Split gutter={GutterSize.md} style={{ overflowY: 'auto' }}>
@@ -86,8 +88,10 @@ export const Vehicles: React.FC<Props> = ({
               id={vehicle.id}
               description={vehicle.name}
               capacity={vehicle.capacity}
+              maxWorkingHours={vehicle.maxWorkingHours}
               removeHandler={removeVehicleHandler}
               capacityChangeHandler={changeVehicleCapacityHandler}
+              maxWorkingHoursChangeHandler={changeVehicleMaxWorkingHoursHandler}
             />
           ))}
       </DataList>

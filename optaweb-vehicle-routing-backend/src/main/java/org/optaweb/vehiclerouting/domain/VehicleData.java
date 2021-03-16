@@ -25,10 +25,12 @@ public class VehicleData {
 
     private final String name;
     private final int capacity;
+    private final int maxWorkingHours;
 
-    VehicleData(String name, int capacity) {
+    VehicleData(String name, int capacity, int maxWorkingHours) {
         this.name = Objects.requireNonNull(name);
         this.capacity = capacity;
+        this.maxWorkingHours = maxWorkingHours;
     }
 
     /**
@@ -47,6 +49,10 @@ public class VehicleData {
      */
     public int capacity() {
         return capacity;
+    }
+
+    public int maxWorkingHours() {
+        return maxWorkingHours;
     }
 
     @Override

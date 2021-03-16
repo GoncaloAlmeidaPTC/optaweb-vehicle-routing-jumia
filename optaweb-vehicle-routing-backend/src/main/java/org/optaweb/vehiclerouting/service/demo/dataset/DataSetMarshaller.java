@@ -16,13 +16,9 @@
 
 package org.optaweb.vehiclerouting.service.demo.dataset;
 
-import static java.util.stream.Collectors.toList;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.util.Collections;
-import java.util.Optional;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.optaweb.vehiclerouting.domain.Coordinates;
 import org.optaweb.vehiclerouting.domain.LocationData;
 import org.optaweb.vehiclerouting.domain.RoutingProblem;
@@ -30,9 +26,12 @@ import org.optaweb.vehiclerouting.domain.VehicleData;
 import org.optaweb.vehiclerouting.domain.VehicleFactory;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Collections;
+import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Data set marshaller using the YAML format.
@@ -117,7 +116,7 @@ public class DataSetMarshaller {
     }
 
     static DataSetVehicle toDataSet(VehicleData vehicleData) {
-        return new DataSetVehicle(vehicleData.name(), vehicleData.capacity());
+        return new DataSetVehicle(vehicleData.name(), vehicleData.capacity(), vehicleData.maxWorkingHours());
     }
 
     static RoutingProblem toDomain(DataSet dataSet) {
@@ -141,6 +140,6 @@ public class DataSetMarshaller {
     }
 
     static VehicleData toDomain(DataSetVehicle dataSetVehicle) {
-        return VehicleFactory.vehicleData(dataSetVehicle.name, dataSetVehicle.capacity);
+        return VehicleFactory.vehicleData(dataSetVehicle.name, dataSetVehicle.capacity, dataSetVehicle.maxWorkingHours);
     }
 }

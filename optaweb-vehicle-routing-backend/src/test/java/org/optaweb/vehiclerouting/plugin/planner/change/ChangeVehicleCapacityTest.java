@@ -16,11 +16,6 @@
 
 package org.optaweb.vehiclerouting.plugin.planner.change;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -29,6 +24,11 @@ import org.optaplanner.core.api.score.director.ScoreDirector;
 import org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVehicle;
 import org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVehicleFactory;
 import org.optaweb.vehiclerouting.plugin.planner.domain.VehicleRoutingSolution;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ChangeVehicleCapacityTest {
@@ -40,9 +40,10 @@ class ChangeVehicleCapacityTest {
     void change_vehicle_capacity() {
         int oldCapacity = 100;
         int newCapacity = 50;
+        int maxWorkingHours = 3600000;
 
-        PlanningVehicle workingVehicle = PlanningVehicleFactory.testVehicle(1, oldCapacity);
-        PlanningVehicle changeVehicle = PlanningVehicleFactory.testVehicle(2, newCapacity);
+        PlanningVehicle workingVehicle = PlanningVehicleFactory.testVehicle(1, oldCapacity, maxWorkingHours);
+        PlanningVehicle changeVehicle = PlanningVehicleFactory.testVehicle(2, newCapacity, maxWorkingHours);
 
         when(scoreDirector.lookUpWorkingObject(changeVehicle)).thenReturn(workingVehicle);
 

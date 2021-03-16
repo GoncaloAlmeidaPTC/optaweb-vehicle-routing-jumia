@@ -32,15 +32,17 @@ public class VehicleEntity {
     private long id;
     private String name;
     private int capacity;
+    private int maxWorkingHours;
 
     protected VehicleEntity() {
         // for JPA
     }
 
-    public VehicleEntity(long id, String name, int capacity) {
+    public VehicleEntity(long id, String name, int capacity, int maxWorkingHours) {
         this.id = id;
         this.name = name;
         this.capacity = capacity;
+        this.maxWorkingHours = maxWorkingHours;
     }
 
     public long getId() {
@@ -55,12 +57,18 @@ public class VehicleEntity {
         return capacity;
     }
 
+    public int getMaxWorkingHours() {
+        return maxWorkingHours;
+    }
+
     @Override
     public String toString() {
         return "VehicleEntity{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", capacity=" + capacity +
+                ", maxWorkingHours=" + maxWorkingHours +
                 '}';
     }
+
 }

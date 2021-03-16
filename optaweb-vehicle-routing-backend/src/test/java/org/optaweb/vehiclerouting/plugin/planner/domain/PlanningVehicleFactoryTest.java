@@ -16,12 +16,12 @@
 
 package org.optaweb.vehiclerouting.plugin.planner.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVehicleFactory.fromDomain;
-
 import org.junit.jupiter.api.Test;
 import org.optaweb.vehiclerouting.domain.Vehicle;
 import org.optaweb.vehiclerouting.domain.VehicleFactory;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVehicleFactory.fromDomain;
 
 class PlanningVehicleFactoryTest {
 
@@ -30,7 +30,8 @@ class PlanningVehicleFactoryTest {
         long vehicleId = 2;
         String name = "not used";
         int capacity = 7;
-        Vehicle domainVehicle = VehicleFactory.createVehicle(vehicleId, name, capacity);
+        int maxWorkingHours = 3600000;
+        Vehicle domainVehicle = VehicleFactory.createVehicle(vehicleId, name, capacity, maxWorkingHours);
 
         PlanningVehicle vehicle = fromDomain(domainVehicle);
 

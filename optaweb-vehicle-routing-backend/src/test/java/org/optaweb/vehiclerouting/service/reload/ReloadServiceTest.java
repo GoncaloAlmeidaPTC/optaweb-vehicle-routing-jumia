@@ -16,13 +16,6 @@
 
 package org.optaweb.vehiclerouting.service.reload;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,6 +30,13 @@ import org.optaweb.vehiclerouting.service.location.LocationService;
 import org.optaweb.vehiclerouting.service.vehicle.VehicleRepository;
 import org.optaweb.vehiclerouting.service.vehicle.VehicleService;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ReloadServiceTest {
@@ -55,7 +55,7 @@ class ReloadServiceTest {
     @Mock
     ApplicationStartedEvent event;
 
-    private final Vehicle vehicle = VehicleFactory.createVehicle(193, "Vehicle 193", 100);
+    private final Vehicle vehicle = VehicleFactory.createVehicle(193, "Vehicle 193", 100, 3600000);
     private final List<Vehicle> persistedVehicles = Arrays.asList(vehicle, vehicle);
     private final Coordinates coordinates = Coordinates.valueOf(0.0, 1.0);
     private final Location location = new Location(1, coordinates);

@@ -16,11 +16,6 @@
 
 package org.optaweb.vehiclerouting.service.vehicle;
 
-import static java.util.Comparator.comparingLong;
-
-import java.util.Objects;
-import java.util.Optional;
-
 import org.optaweb.vehiclerouting.domain.Vehicle;
 import org.optaweb.vehiclerouting.domain.VehicleData;
 import org.optaweb.vehiclerouting.domain.VehicleFactory;
@@ -28,10 +23,16 @@ import org.optaweb.vehiclerouting.service.location.RouteOptimizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+import java.util.Optional;
+
+import static java.util.Comparator.comparingLong;
+
 @Service
 public class VehicleService {
 
     static final int DEFAULT_VEHICLE_CAPACITY = 10;
+    static final int DEFAULT_MAX_WORKING_HOURS_IN_MILLIS = 6 * 3600000;
 
     private final RouteOptimizer optimizer;
     private final VehicleRepository vehicleRepository;
@@ -43,7 +44,7 @@ public class VehicleService {
     }
 
     public void createVehicle() {
-        Vehicle vehicle = vehicleRepository.createVehicle(DEFAULT_VEHICLE_CAPACITY);
+        Vehicle vehicle = vehicleRepository.createVehicle(DEFAULT_VEHICLE_CAPACITY, DEFAULT_MAX_WORKING_HOURS_IN_MILLIS);
         addVehicle(vehicle);
     }
 
@@ -77,8 +78,16 @@ public class VehicleService {
     public void changeCapacity(long vehicleId, int capacity) {
         Vehicle vehicle = vehicleRepository.find(vehicleId).orElseThrow(() -> new IllegalArgumentException(
                 "Can't remove Vehicle{id=" + vehicleId + "} because it doesn't exist"));
-        Vehicle updatedVehicle = VehicleFactory.createVehicle(vehicle.id(), vehicle.name(), capacity);
+        Vehicle updatedVehicle = VehicleFactory.createVehicle(vehicle.id(), vehicle.name(), capacity, vehicle.maxWorkingHours());
         vehicleRepository.update(updatedVehicle);
         optimizer.changeCapacity(updatedVehicle);
+    }
+
+    public void changeMaxWorkingHours(long vehicleId, int maxWorkingHours) {
+        Vehicle vehicle = vehicleRepository.find(vehicleId).orElseThrow(() -> new IllegalArgumentException(
+                "Can't remove Vehicle{id=" + vehicleId + "} because it doesn't exist"));
+        Vehicle updatedVehicle = VehicleFactory.createVehicle(vehicle.id(), vehicle.name(), vehicle.capacity(), maxWorkingHours * 3600000);
+        vehicleRepository.update(updatedVehicle);
+        optimizer.changeMaxWorkingHours(updatedVehicle);
     }
 }

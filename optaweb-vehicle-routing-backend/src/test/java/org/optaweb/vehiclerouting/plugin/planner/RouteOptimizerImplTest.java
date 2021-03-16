@@ -16,21 +16,6 @@
 
 package org.optaweb.vehiclerouting.plugin.planner;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.clearInvocations;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.optaweb.vehiclerouting.domain.VehicleFactory.createVehicle;
-import static org.optaweb.vehiclerouting.domain.VehicleFactory.testVehicle;
-import static org.optaweb.vehiclerouting.plugin.planner.domain.PlanningLocationFactory.fromDomain;
-
-import java.util.Arrays;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -47,6 +32,21 @@ import org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVehicle;
 import org.optaweb.vehiclerouting.plugin.planner.domain.PlanningVisit;
 import org.optaweb.vehiclerouting.plugin.planner.domain.VehicleRoutingSolution;
 import org.optaweb.vehiclerouting.service.location.DistanceMatrixRow;
+
+import java.util.Arrays;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.clearInvocations;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.optaweb.vehiclerouting.domain.VehicleFactory.createVehicle;
+import static org.optaweb.vehiclerouting.domain.VehicleFactory.testVehicle;
+import static org.optaweb.vehiclerouting.plugin.planner.domain.PlanningLocationFactory.fromDomain;
 
 @ExtendWith(MockitoExtension.class)
 class RouteOptimizerImplTest {
@@ -410,13 +410,14 @@ class RouteOptimizerImplTest {
         final long vehicleId = 1;
         final int oldCapacity = 7;
         final int newCapacity = 12;
-        Vehicle vehicle = createVehicle(vehicleId, "", oldCapacity);
+        final int maxWorkingHours = 3600000;
+        Vehicle vehicle = createVehicle(vehicleId, "", oldCapacity, maxWorkingHours);
         routeOptimizer.addVehicle(vehicle);
         routeOptimizer.addLocation(location1, matrixRow);
         clearInvocations(routeChangedEventPublisher);
 
         // change capacity when solver is not running
-        routeOptimizer.changeCapacity(createVehicle(vehicleId, "", newCapacity));
+        routeOptimizer.changeCapacity(createVehicle(vehicleId, "", newCapacity, maxWorkingHours));
         verifyNoInteractions(solverManager);
         VehicleRoutingSolution preliminarySolution = verifyPublishingPreliminarySolution();
         assertThat(preliminarySolution.getVehicleList().get(0).getCapacity()).isEqualTo(newCapacity);
@@ -433,12 +434,13 @@ class RouteOptimizerImplTest {
         // 1 vehicle, 1 depot, 1 visit
         final int capacity = 14816;
         final long vehicleId = 10;
+        final int maxWorkingHours = 3600000;
         routeOptimizer.addVehicle(testVehicle(vehicleId));
         routeOptimizer.addLocation(location1, matrixRow);
         routeOptimizer.addLocation(location2, matrixRow);
         verify(solverManager).startSolver(any(VehicleRoutingSolution.class));
 
-        routeOptimizer.changeCapacity(createVehicle(vehicleId, "", capacity));
+        routeOptimizer.changeCapacity(createVehicle(vehicleId, "", capacity, maxWorkingHours));
 
         verify(solverManager).changeCapacity(any(PlanningVehicle.class));
     }

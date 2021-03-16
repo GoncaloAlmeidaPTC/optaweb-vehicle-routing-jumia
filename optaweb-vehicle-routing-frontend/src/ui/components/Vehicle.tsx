@@ -25,22 +25,26 @@ import {
 } from '@patternfly/react-core';
 import { MinusIcon, PlusIcon, TimesIcon } from '@patternfly/react-icons';
 import * as React from 'react';
-import { VehicleCapacity } from 'store/route/types';
+import {VehicleCapacity, VehicleMaxWorkingHours} from 'store/route/types';
 
 export interface VehicleProps {
   id: number;
   description: string;
   capacity: number;
+  maxWorkingHours: number;
   removeHandler: (id: number) => void;
   capacityChangeHandler: (vehicleCapacity: VehicleCapacity) => void;
+  maxWorkingHoursChangeHandler: (vehicleCapacity: VehicleMaxWorkingHours) => void;
 }
 
 const Vehicle: React.FC<VehicleProps> = ({
   id,
   description,
   capacity,
+  maxWorkingHours,
   removeHandler,
   capacityChangeHandler,
+  maxWorkingHoursChangeHandler,
 }) => {
   const [clicked, setClicked] = React.useState(false);
 
@@ -70,6 +74,28 @@ const Vehicle: React.FC<VehicleProps> = ({
               variant={ButtonVariant.primary}
               data-test-key={`capacity-increase-${id}`}
               onClick={() => capacityChangeHandler({ vehicleId: id, capacity: capacity + 1 })}
+            >
+              <PlusIcon />
+            </Button>
+          </InputGroup>
+        </DataListCell>
+        <DataListCell isFilled>
+          <InputGroup>
+            <Button
+                variant={ButtonVariant.primary}
+                isDisabled={maxWorkingHours === 0}
+                data-test-key={`maxWorkingHours-decrease-${id}`}
+                onClick={() => maxWorkingHoursChangeHandler({ vehicleId: id, maxWorkingHours: maxWorkingHours - 1 })}
+            >
+              <MinusIcon />
+            </Button>
+            <InputGroupText readOnly>
+              {maxWorkingHours}
+            </InputGroupText>
+            <Button
+                variant={ButtonVariant.primary}
+                data-test-key={`maxWorkingHours-increase-${id}`}
+                onClick={() => maxWorkingHoursChangeHandler({ vehicleId: id, maxWorkingHours: maxWorkingHours + 1 })}
             >
               <PlusIcon />
             </Button>

@@ -16,12 +16,6 @@
 
 package org.optaweb.vehiclerouting.plugin.websocket;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.optaweb.vehiclerouting.domain.Coordinates;
 import org.optaweb.vehiclerouting.domain.Distance;
@@ -31,6 +25,12 @@ import org.optaweb.vehiclerouting.domain.RouteWithTrack;
 import org.optaweb.vehiclerouting.domain.RoutingPlan;
 import org.optaweb.vehiclerouting.domain.Vehicle;
 import org.optaweb.vehiclerouting.domain.VehicleFactory;
+
+import java.util.List;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class PortableRoutingPlanFactoryTest {
 
@@ -63,8 +63,8 @@ class PortableRoutingPlanFactoryTest {
         final Location location3 = new Location(3, coordinates3);
         final Distance distance = Distance.ofMillis(5);
 
-        final Vehicle vehicle1 = VehicleFactory.createVehicle(1, "Vehicle 1", 100);
-        final Vehicle vehicle2 = VehicleFactory.createVehicle(2, "Vehicle 2", 200);
+        final Vehicle vehicle1 = VehicleFactory.createVehicle(1, "Vehicle 1", 100, 3600000);
+        final Vehicle vehicle2 = VehicleFactory.createVehicle(2, "Vehicle 2", 200, 3600000);
 
         RouteWithTrack route1 = new RouteWithTrack(
                 new Route(vehicle1, location1, singletonList(location2)),

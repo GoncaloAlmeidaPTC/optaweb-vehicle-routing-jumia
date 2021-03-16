@@ -16,15 +16,6 @@
 
 package org.optaweb.vehiclerouting.service.vehicle;
 
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatNullPointerException;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -36,6 +27,15 @@ import org.optaweb.vehiclerouting.domain.Vehicle;
 import org.optaweb.vehiclerouting.domain.VehicleData;
 import org.optaweb.vehiclerouting.domain.VehicleFactory;
 import org.optaweb.vehiclerouting.service.location.RouteOptimizer;
+
+import java.util.Optional;
+
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class VehicleServiceTest {
@@ -54,9 +54,10 @@ class VehicleServiceTest {
         final long vehicleId = 63;
         final String name = "Veh5";
         final int capacity = VehicleService.DEFAULT_VEHICLE_CAPACITY * 2 + 29;
-        final Vehicle vehicle = VehicleFactory.createVehicle(vehicleId, name, capacity);
+        final int maxWorkingHours = 3600000;
+        final Vehicle vehicle = VehicleFactory.createVehicle(vehicleId, name, capacity, maxWorkingHours);
         // verify that new vehicle is created with correct initial name and capacity
-        when(vehicleRepository.createVehicle(VehicleService.DEFAULT_VEHICLE_CAPACITY)).thenReturn(vehicle);
+        when(vehicleRepository.createVehicle(VehicleService.DEFAULT_VEHICLE_CAPACITY, VehicleService.DEFAULT_MAX_WORKING_HOURS_IN_MILLIS)).thenReturn(vehicle);
 
         vehicleService.createVehicle();
 
@@ -73,8 +74,9 @@ class VehicleServiceTest {
         final long vehicleId = 63;
         final String name = "Veh5";
         final int capacity = 101;
-        VehicleData vehicleData = VehicleFactory.vehicleData(name, capacity);
-        final Vehicle vehicle = VehicleFactory.createVehicle(vehicleId, name, capacity);
+        final int maxWorkingHours = 3600000;
+        VehicleData vehicleData = VehicleFactory.vehicleData(name, capacity, maxWorkingHours);
+        final Vehicle vehicle = VehicleFactory.createVehicle(vehicleId, name, capacity, maxWorkingHours);
         when(vehicleRepository.createVehicle(vehicleData)).thenReturn(vehicle);
 
         vehicleService.createVehicle(vehicleData);
@@ -138,7 +140,8 @@ class VehicleServiceTest {
     void changeCapacity() {
         final long vehicleId = 1;
         final int capacity = 123;
-        final Vehicle originalVehicle = VehicleFactory.createVehicle(vehicleId, "1", capacity - 10);
+        int maxWorkingHours = 3600000;
+        final Vehicle originalVehicle = VehicleFactory.createVehicle(vehicleId, "1", capacity - 10, maxWorkingHours);
         when(vehicleRepository.find(vehicleId)).thenReturn(Optional.of(originalVehicle));
 
         vehicleService.changeCapacity(vehicleId, capacity);
