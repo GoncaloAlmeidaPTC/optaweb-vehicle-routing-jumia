@@ -1,0 +1,21 @@
+---
+name: "EG-Nasr City-Fleet deliveries"
+vehicles:
+  - name: "Vehicle 1"
+    capacity: 10
+  - name: "Vehicle 2"
+    capacity: 10
+  - name: "Vehicle 3"
+    capacity: 10
+  - name: "Vehicle 4"
+    capacity: 10
+  - name: "Vehicle 5"
+    capacity: 10
+  - name: "Vehicle 6"
+    capacity: 10
+depot:
+  label: "EG-Nasr City-Fleet"
+  lat: 30.04
+  lng: 31.21
+  #30.047271849521206, 31.32689460701332
+visits: []

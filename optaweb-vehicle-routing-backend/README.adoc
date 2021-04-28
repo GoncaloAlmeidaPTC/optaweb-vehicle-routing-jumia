@@ -2,3 +2,22 @@
 
 See the <<../optaweb-vehicle-routing-docs/src/main/asciidoc/development-guide#backend,back end development chapter>>
 in the documentation.
+
+*HOW TO USE*:
+
+ -  Fill Google Sheet named *Route Planner - OptaPlanner* (ask access for it)
+ - Save as csv file with headers with ; as column separator
+ - Use an online tool to convert CSV content to JSON like in https://www.convertcsv.com/csv-to-json.htm
+ - Build api service http request with JSON data using a command line tool like _curl_ or browser based https://reqbin.com/
+
+
+*Example api call to register multiple location(delivery addresses)*
+
+```
+curl 'http://localhost:8080/api/locations' \
+-H 'Content-Type: application/json' \
+--data-raw '[{"lat":30.050225076367575,"lng":31.324512805523007,"description":""},{"lat":30.051933821495645,"lng":31.325414027708526,"description":""},{"lat":30.050689412200054,"lng":31.32086500143874,"description":""}]' \
+--compressed
+```
+
+Make sure to replace host part of the url and fill the locations to visit (lat + lng + description)

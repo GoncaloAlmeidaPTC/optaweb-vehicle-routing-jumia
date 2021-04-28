@@ -58,14 +58,21 @@ class RoutingProblemConfig {
     @Bean
     RoutingProblemList routingProblems() {
         ArrayList<RoutingProblem> problems = new ArrayList<>();
-        problems.add(dataSetMarshaller.unmarshal(belgiumReader()));
+        problems.add(dataSetMarshaller.unmarshal(egNasrCityFleetReader()));
+        problems.add(dataSetMarshaller.unmarshal(eg3PLElBadrReader()));
         problems.addAll(localDataSets());
         return new RoutingProblemList(problems);
     }
 
-    private static Reader belgiumReader() {
+    private static Reader egNasrCityFleetReader() {
         return new InputStreamReader(
-                DemoService.class.getResourceAsStream("belgium-cities.yaml"),
+                DemoService.class.getResourceAsStream("EG-Nasr City-Fleet.yaml"),
+                StandardCharsets.UTF_8);
+    }
+
+    private static Reader eg3PLElBadrReader() {
+        return new InputStreamReader(
+                DemoService.class.getResourceAsStream("EG-3PL-El Badr.yaml"),
                 StandardCharsets.UTF_8);
     }
 

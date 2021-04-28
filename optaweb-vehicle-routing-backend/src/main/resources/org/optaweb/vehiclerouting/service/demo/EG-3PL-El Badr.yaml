@@ -1,0 +1,22 @@
+---
+name: "EG-3PL-El Badr-Fleet deliveries"
+vehicles:
+  - name: "Vehicle 1"
+    capacity: 10
+  - name: "Vehicle 2"
+    capacity: 10
+  - name: "Vehicle 3"
+    capacity: 10
+  - name: "Vehicle 4"
+    capacity: 10
+  - name: "Vehicle 5"
+    capacity: 10
+  - name: "Vehicle 6"
+    capacity: 10
+depot:
+  label: "EG-3PL-El Badr"
+  lat: 30.11
+  lng: 31.34
+  #30.113402827577964, 31.348608074848148
+visits: []
+
